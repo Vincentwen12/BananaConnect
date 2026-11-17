@@ -1,0 +1,60 @@
+:root {
+  color-scheme: light;
+
+  /* 主色：香蕉黄（设置页可改，运行时覆盖下面 7 个值） */
+  --accent: #ffd43b;
+  --accent-hover: #ffe066;
+  --accent-active: #f2c31c;
+  --accent-soft: #fff9e2;
+  --accent-line: #f0c93a;
+  --accent-ink: #7a5c00;
+  --on-accent: #2b2200;
+
+  /* 中性色 */
+  --bg: #f6f7f8;
+  --surface: #ffffff;
+  --surface-2: #fafafa;
+  --surface-3: #f1f2f4;
+  --border: #e4e6e9;
+  --border-strong: #d6d9de;
+
+  --text: #1b1e21;
+  --text-2: #6a7076;
+  --text-3: #9aa0a6;
+
+  /* 语义色 */
+  --ok: #1f9d63;
+  --ok-soft: #e9f7ef;
+  --warn: #cf8a05;
+  --warn-soft: #fff6e2;
+  --danger: #cf4a45;
+  --danger-soft: #fdeeee;
+  --info: #3b7ddd;
+  --info-soft: #eef4ff;
+
+  /* 形状：只有三档 */
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-pill: 99px;
+
+  --shadow-pop: 0 10px 30px rgba(20, 26, 38, 0.12);
+
+  /* 字号：只有五档 */
+  --fs-xs: 11px;
+  --fs-sm: 12px;
+  --fs-md: 13px;
+  --fs-lg: 20px;
+  --fs-xl: 28px;
+
+  /* 布局 */
+  --title-h: 44px;
+  --status-h: 30px;
+  --nav-w: 76px;
+
+  --font:
+    "MiSans", "HarmonyOS Sans SC", "Microsoft YaHei UI", "Microsoft YaHei", "PingFang SC",
+    "Noto Sans CJK SC", system-ui, -apple-system, sans-serif;
+  --mono: "JetBrains Mono", "Cascadia Mono", "Consolas", "Courier New", monospace;
+
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+}

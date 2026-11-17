@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BananaConnect — 把局域网世界开出去</title>
+    <meta name="description" content="12 位邀请码，P2P 直连优先，打洞失败自动走公益节点。Minecraft 局域网世界在朋友的多人游戏列表里直接出现。" />
+    <link rel="icon" href="assets/cube.svg" type="image/svg+xml" />
+    <style>
+      :root {
+        --ink: #14171a;
+        --ink-2: #5b6269;
+        --ink-3: #9aa1a8;
+        --line: #e6e8eb;
+        --line-strong: #d5d9dd;
+        --paper: #ffffff;
+        --paper-2: #f7f8f9;
+        --accent: #ffd43b;
+        --mono: "Cascadia Mono", Consolas, "SF Mono", monospace;
+        --sans: "MiSans", "HarmonyOS Sans SC", "Microsoft YaHei UI", "PingFang SC", sans-serif;
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: var(--sans);
+        font-size: 15px;
+        line-height: 1.7;
+        -webkit-font-smoothing: antialiased;
+      }
+      a { color: inherit; text-decoration: none; }
+      img { display: block; max-width: 100%; }
+      .wrap { width: min(1080px, calc(100% - 48px)); margin: 0 auto; }
+      .mono { font-family: var(--mono); font-size: 12px; letter-spacing: 0.02em; }
+
+      header.top {
+        border-bottom: 1px solid var(--line);
+      }
+      .top-inner {
+        display: flex; align-items: center; gap: 12px;
+        height: 62px;
+      }
+      .brand { display: flex; align-items: center; gap: 9px; font-weight: 600; }
+      .brand img { width: 22px; height: 22px; }
+      .top .ver { color: var(--ink-3); }
+      .top nav { margin-left: auto; display: flex; gap: 22px; color: var(--ink-2); font-size: 13px; }
+      .top nav a:hover { color: var(--ink); }
+
+      .hero { padding: 88px 0 56px; }
+      .kicker { display: flex; align-items: center; gap: 10px; color: var(--ink-3); margin-bottom: 22px; }
+      .kicker i { width: 26px; height: 2px; background: var(--accent); display: block; }
+      h1 {
+        font-size: clamp(36px, 5.4vw, 58px);
+        line-height: 1.12;
+        letter-spacing: -0.02em;
+        font-weight: 650;
+        margin: 0 0 20px;
+      }
+      .lead { max-width: 620px; font-size: 17px; color: var(--ink-2); margin: 0 0 32px; }
+      .actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+      .btn {
+        display: inline-flex; align-items: center; gap: 8px;
+        height: 44px; padding: 0 20px; border-radius: 6px;
+        font-size: 14px; font-weight: 600; border: 1px solid transparent;
+      }
+      .btn-solid { background: var(--ink); color: #fff; }
+      .btn-solid:hover { background: #000; }
+      .btn-line { border-color: var(--line-strong); color: var(--ink); }
+      .btn-line:hover { border-color: var(--ink); }
+      .meta { margin-top: 18px; color: var(--ink-3); }
+
+      .shot { margin-top: 52px; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+      .shot img { width: 100%; }
+
+      section { border-top: 1px solid var(--line); padding: 72px 0; }
+      .sec-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 34px; }
+      .sec-head h2 { font-size: 28px; font-weight: 620; letter-spacing: -0.01em; margin: 0; }
+      .sec-head span { color: var(--ink-3); }
+
+      .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+      .item h3 { font-size: 16px; margin: 0 0 8px; font-weight: 620; }
+      .item p { margin: 0; color: var(--ink-2); font-size: 14px; }
+      .item .no { display: block; color: var(--ink-3); margin-bottom: 14px; }
+
+      .demo { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+      .demo img { width: 100%; }
+      .caption { margin-top: 12px; color: var(--ink-3); font-size: 13px; }
+
+      table { width: 100%; border-collapse: collapse; font-size: 14px; }
+      th, td { text-align: left; padding: 14px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+      th { color: var(--ink-3); font-weight: 500; font-size: 12px; letter-spacing: 0.04em; }
+      td:first-child { font-weight: 600; }
+      tr.me td { background: #fffdf2; }
+      tr.me td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
+
+      .limits { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px 40px; }
+      .limits p { margin: 0; color: var(--ink-2); font-size: 14px; padding-left: 18px; position: relative; }
+      .limits p::before { content: ""; position: absolute; left: 0; top: 10px; width: 6px; height: 1px; background: var(--ink-3); }
+
+      ol.steps { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; counter-reset: step; }
+      ol.steps li { counter-increment: step; }
+      ol.steps li::before {
+        content: "0" counter(step);
+        display: block; font-family: var(--mono); font-size: 12px; color: var(--ink-3); margin-bottom: 12px;
+      }
+      ol.steps h3 { font-size: 15px; margin: 0 0 6px; font-weight: 620; }
+      ol.steps p { margin: 0; font-size: 14px; color: var(--ink-2); }
+
+      .download { text-align: center; padding: 88px 0; }
+      .download h2 { font-size: 30px; margin: 0 0 12px; font-weight: 620; }
+      .download p { color: var(--ink-2); margin: 0 0 26px; }
+      .download .meta { margin-top: 16px; }
+
+      footer { border-top: 1px solid var(--line); padding: 28px 0 44px; color: var(--ink-3); font-size: 12px; }
+      footer .row { display: flex; gap: 18px; flex-wrap: wrap; }
+
+      .reveal { transition: opacity 0.5s ease, transform 0.5s ease; }
+      .js .reveal { opacity: 0; transform: translateY(10px); }
+      .js .reveal.in { opacity: 1; transform: none; }
+      @media (prefers-reduced-motion: reduce) {
+        .js .reveal { opacity: 1; transform: none; transition: none; }
+        html { scroll-behavior: auto; }
+      }
+      @media (max-width: 860px) {
+        .grid3, .limits, ol.steps { grid-template-columns: 1fr; gap: 24px; }
+        .top nav { display: none; }
+        .hero { padding-top: 56px; }
+        section { padding: 52px 0; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="top">
+      <div class="wrap top-inner">
+        <span class="brand">
+          <img src="assets/cube.svg" alt="" />
+          BananaConnect
+        </span>
+        <span class="mono ver">v0.1.0 · 预览版</span>
+        <nav>
+          <a href="#how">怎么用</a>
+          <a href="#why">设计取舍</a>
+          <a href="#limits">限制</a>
+          <a href="#download">下载</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <section class="hero" style="border-top: 0">
+        <div class="kicker mono"><i></i>MINECRAFT · LAN OVER INTERNET</div>
+        <h1>把局域网世界<br />开出去。</h1>
+        <p class="lead">
+          房主在游戏里点「对局域网开放」，这里生成一个 12 位邀请码。朋友输入同一串码，
+          「多人游戏」列表里就会出现你的世界，点进去就能玩。传输走 P2P 直连，打不通时自动落到公益节点中转。
+        </p>
+        <div class="actions">
+          <a class="btn btn-solid" href="#download">下载 Windows 版</a>
+          <a class="btn btn-line" href="#demo">看它怎么跑</a>
+        </div>
+        <div class="meta mono">WINDOWS 10 / 11 · 15.6 MB · 便携免安装 · 首次需管理员权限</div>
+
+        <div class="shot reveal">
+          <img src="assets/home.png" alt="BananaConnect 主界面：创建房间与加入房间" />
+        </div>
+      </section>
+
+      <section id="demo">
+        <div class="sec-head"><h2>运行起来</h2><span class="mono">5 秒 · 实际操作</span></div>
+        <div class="demo reveal">
+          <img src="assets/demo.gif" alt="创建房间、查看主机状态、日志与设置" />
+        </div>
+        <p class="caption">房间面板、主机状态、日志、设置：全部是客户端里的真实界面，不是效果图。</p>
+      </section>
+
+      <section id="how">
+        <div class="sec-head"><h2>能干什么</h2><span class="mono">THREE THINGS</span></div>
+        <div class="grid3">
+          <div class="item reveal">
+            <span class="no mono">01</span>
+            <h3>12 位邀请码</h3>
+            <p>网络名、密钥、虚拟网段都由这串码派生，不依赖账号系统。码长 12 位、32 字母表，约 2⁶⁰ 种组合。</p>
+          </div>
+          <div class="item reveal">
+            <span class="no mono">02</span>
+            <h3>直连优先，失败中转</h3>
+            <p>基于 EasyTier 打洞，先尝试两端直连；NAT 打不通时，自动落到公益共享节点中转，不会卡在“连接中”。</p>
+          </div>
+          <div class="item reveal">
+            <span class="no mono">03</span>
+            <h3>列表里直接出现</h3>
+            <p>开启 UDP 广播中继，客户端收到改写端口后的 4445 广播，世界直接出现在「多人游戏」，不用手填虚拟 IP。</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="why">
+        <div class="sec-head"><h2>为什么这么做</h2><span class="mono">TRADE-OFFS</span></div>
+        <table>
+          <thead>
+            <tr><th>方案</th><th>传输</th><th>列表出现</th><th>打洞失败</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>PCL CE / MCTier 系</td>
+              <td>EasyTier 虚拟局域网</td>
+              <td>多数要手填虚拟 IP</td>
+              <td>公共节点中转</td>
+            </tr>
+            <tr>
+              <td>XMCL 系</td>
+              <td>WebRTC 打洞</td>
+              <td>本地代理 + 广播注入</td>
+              <td>需要自建 TURN</td>
+            </tr>
+            <tr class="me">
+              <td>BananaConnect</td>
+              <td>EasyTier + 自建代理</td>
+              <td>广播中继，列表直出</td>
+              <td>自动走公益节点</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="caption">传输层不重造轮子：EasyTier 已在 PCL CE、HMCL、MCTier 里跑了很久。我们把力气花在客户端体验上——世界要自己出现在列表里，而不是让玩家记住一串虚拟 IP。</p>
+      </section>
+
+      <section id="limits">
+        <div class="sec-head"><h2>先说清楚限制</h2><span class="mono">HONEST NOTES</span></div>
+        <div class="limits">
+          <p>首次启动需要管理员权限，用来安装虚拟网卡（WinTun）。</p>
+          <p>公益节点由社区提供，可能限速、排队或临时不可用。</p>
+          <p>朋友也要安装同一个客户端，双方都跑 EasyTier 才能互通。</p>
+          <p>离线联机需要房主侧关闭正版验证（例如 mcwifipnp），这不是本工具能改的。</p>
+          <p>当前是预览版：房间创建与进程管理已接入 EasyTier，玩家列表与流量指标仍在接入。</p>
+          <p>传输层使用 EasyTier（Apache-2.0），我们不打包任何 Minecraft 官方素材。</p>
+        </div>
+      </section>
+
+      <section>
+        <div class="sec-head"><h2>三步</h2><span class="mono">QUICK START</span></div>
+        <ol class="steps">
+          <li class="reveal">
+            <h3>装好，允许网络组件</h3>
+            <p>解压即用；第一次创建房间时会请求一次管理员权限。</p>
+          </li>
+          <li class="reveal">
+            <h3>游戏里开放局域网</h3>
+            <p>ESC →「对局域网开放」，回到客户端点创建房间。</p>
+          </li>
+          <li class="reveal">
+            <h3>把 12 位码发出去</h3>
+            <p>朋友输入邀请码，等两三秒，进「多人游戏」就能看到世界。</p>
+          </li>
+        </ol>
+      </section>
+
+      <section id="download" class="download" style="border-bottom: 0">
+        <h2>下载</h2>
+        <p>Windows 10 / 11 · 便携版，解压后右键以管理员身份运行。</p>
+        <a class="btn btn-solid" href="../dist-portable/BananaConnect-0.1.0-win-x64.zip">BananaConnect-0.1.0-win-x64.zip</a>
+        <div class="meta mono">15.6 MB · 含 EasyTier core 与 WinTun 驱动</div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="wrap row">
+        <span>BananaConnect 0.1.0</span>
+        <span>传输层 EasyTier · Apache-2.0</span>
+        <span>与 Mojang / Microsoft 无关</span>
+      </div>
+    </footer>
+
+    <script>
+      document.documentElement.classList.add("js");
+      const items = document.querySelectorAll(".reveal");
+      if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("in");
+                observer.unobserve(entry.target);
+              }
+            }
+          },
+          { threshold: 0.12 },
+        );
+        items.forEach((item) => observer.observe(item));
+      } else {
+        items.forEach((item) => item.classList.add("in"));
+      }
+    </script>
+  </body>
+</html>
