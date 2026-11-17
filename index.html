@@ -1,0 +1,452 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BananaConnect — 把局域网世界开出去</title>
+    <meta property="og:title" content="BananaConnect — 把局域网世界开出去" />
+    <meta property="og:description" content="12 位邀请码，P2P 直连优先，失败自动走公益节点。世界直接出现在多人游戏列表。" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://vincentwen12.github.io/BananaConnect/" />
+    <meta property="og:image" content="https://vincentwen12.github.io/BananaConnect/assets/web/room.webp" />
+    <meta name="theme-color" content="#ffd43b" />
+    <meta name="description" content="12 位邀请码，P2P 直连优先，打洞失败自动走公益节点。Minecraft 局域网世界直接出现在朋友的多人游戏列表里。" />
+    <link rel="icon" href="assets/cube.svg" type="image/svg+xml" />
+    <style>
+      :root {
+        --ink: #101317;
+        --ink-2: #565d65;
+        --ink-3: #9aa1a8;
+        --line: #e5e7ea;
+        --line-2: #d3d7dc;
+        --paper: #ffffff;
+        --soft: #f6f7f8;
+        --accent: #ffd43b;
+        --accent-ink: #7a5c00;
+        --mono: "Cascadia Mono", Consolas, "SF Mono", monospace;
+        --sans: "MiSans", "HarmonyOS Sans SC", "Microsoft YaHei UI", "PingFang SC", sans-serif;
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans); font-size: 15px; line-height: 1.75; -webkit-font-smoothing: antialiased; }
+      a { color: inherit; text-decoration: none; }
+      img { display: block; max-width: 100%; }
+      .wrap { width: min(1180px, calc(100% - 56px)); margin: 0 auto; }
+      .mono { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; }
+      .label { display: flex; align-items: center; gap: 10px; color: var(--ink-3); }
+      .label i { width: 28px; height: 2px; background: var(--accent); }
+
+      /* header */
+      header { position: sticky; top: 0; z-index: 30; background: rgba(255,255,255,0.94); backdrop-filter: saturate(140%) blur(6px); border-bottom: 1px solid var(--line); }
+      .bar { display: flex; align-items: center; gap: 12px; height: 60px; }
+      .brand { display: flex; align-items: center; gap: 9px; font-weight: 620; }
+      .brand img { width: 22px; height: 22px; }
+      .ver { color: var(--ink-3); }
+      .bar nav { margin-left: auto; display: flex; gap: 24px; font-size: 13px; color: var(--ink-2); }
+      .bar nav a:hover { color: var(--ink); }
+      .progress { height: 2px; background: var(--accent); width: 0; transition: width 0.12s linear; }
+      .bar nav a.active { color: var(--ink); font-weight: 600; }
+      .gif-bar { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
+      .gif-bar .replay { margin-left: auto; }
+
+      /* hero */
+      .hero { padding: 84px 0 0; }
+      h1 { font-size: clamp(40px, 6.2vw, 72px); line-height: 1.06; letter-spacing: -0.03em; font-weight: 680; margin: 22px 0 22px; }
+      h1 em { font-style: normal; background: linear-gradient(transparent 62%, var(--accent) 62%); padding: 0 2px; }
+      .lead { max-width: 660px; font-size: 17px; color: var(--ink-2); margin: 0 0 30px; }
+      .cta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+      .btn { display: inline-flex; align-items: center; gap: 8px; height: 46px; padding: 0 22px; border-radius: 6px; font-size: 14px; font-weight: 600; border: 1px solid transparent; transition: transform 0.12s ease, background 0.12s ease, border-color 0.12s; }
+      .btn:active { transform: translateY(1px); }
+      .btn-solid { background: var(--ink); color: #fff; }
+      .btn-solid:hover { background: #000; }
+      .btn-line { border-color: var(--line-2); }
+      .btn-line:hover { border-color: var(--ink); }
+      .hero-meta { margin-top: 16px; color: var(--ink-3); }
+
+      /* stage (auto playing screens) */
+      .stage { margin-top: 52px; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--soft); }
+      .frames { position: relative; aspect-ratio: 16 / 10.2; overflow: hidden; }
+      .frames img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top center; opacity: 0; transform: scale(1.015); transition: opacity 0.65s ease, transform 4s linear; }
+      .frames img.on { opacity: 1; transform: scale(1.045); }
+      .stage-foot { display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-top: 1px solid var(--line); background: #fff; }
+      .caption { font-size: 13px; color: var(--ink-2); }
+      .caption b { color: var(--ink); font-weight: 600; }
+      .dots { margin-left: auto; display: flex; gap: 6px; }
+      .dots button { width: 22px; height: 3px; border: 0; padding: 0; background: var(--line-2); cursor: pointer; }
+      .dots button.on { background: var(--accent-ink); }
+      .replay { border: 1px solid var(--line-2); background: #fff; border-radius: 4px; height: 26px; padding: 0 10px; font-size: 12px; cursor: pointer; }
+      .replay:hover { border-color: var(--ink); }
+
+      /* stats */
+      .stats { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin: 0; }
+      .stat { padding: 26px 0 24px; }
+      .stat + .stat { padding-left: 26px; border-left: 1px solid var(--line); }
+      .stat b { display: block; font-family: var(--mono); font-size: 30px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.2; }
+      .stat span { color: var(--ink-3); font-size: 12px; }
+      .stat sup { font-size: 15px; vertical-align: super; }
+
+      /* chapters */
+      section { padding: 84px 0; }
+      .chapter { display: grid; grid-template-columns: 5fr 6fr; gap: 56px; align-items: center; }
+      .chapter.flip { grid-template-columns: 6fr 5fr; }
+      .chapter.flip .text { order: -1; }
+      .chapter h2 { font-size: clamp(26px, 3.2vw, 38px); line-height: 1.22; letter-spacing: -0.02em; margin: 16px 0 14px; font-weight: 640; }
+      .chapter p { color: var(--ink-2); margin: 0 0 12px; }
+      .chapter ul { margin: 18px 0 0; padding: 0; list-style: none; }
+      .chapter li { padding: 10px 0; border-top: 1px solid var(--line); font-size: 14px; color: var(--ink-2); display: flex; gap: 12px; }
+      .chapter li span { font-family: var(--mono); color: var(--ink-3); font-size: 12px; min-width: 22px; }
+      .figure { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--soft); }
+      .figure img { width: 100%; }
+
+      /* diagram */
+      .flow { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; align-items: center; gap: 12px; margin-top: 26px; }
+      .node { border: 1px solid var(--line-2); border-radius: 8px; padding: 14px 16px; background: #fff; }
+      .node b { display: block; font-size: 14px; }
+      .node span { font-family: var(--mono); font-size: 11px; color: var(--ink-3); }
+      .arrow { font-family: var(--mono); color: var(--ink-3); font-size: 18px; }
+      .list-demo { margin-top: 18px; border: 1px solid var(--line); border-radius: 8px; background: #fff; padding: 6px; }
+      .list-row { display: flex; align-items: center; gap: 12px; padding: 9px 10px; font-size: 13px; }
+      .list-row + .list-row { border-top: 1px solid var(--line); }
+      .list-row .sig { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-ink); }
+      .list-row .name { font-weight: 600; }
+      .list-row .meta { margin-left: auto; color: var(--ink-3); font-family: var(--mono); font-size: 11px; }
+
+      /* table */
+      table { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 22px; }
+      th, td { text-align: left; padding: 14px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+      th { color: var(--ink-3); font-weight: 500; font-size: 12px; letter-spacing: 0.05em; }
+      td:first-child { font-weight: 600; }
+      tr.me td { background: #fffdf1; }
+      tr.me td:first-child { box-shadow: inset 3px 0 0 var(--accent); }
+
+      /* limits + steps */
+      .limits { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 48px; }
+      .limits p { margin: 0; color: var(--ink-2); font-size: 14px; padding-left: 16px; position: relative; }
+      .limits p::before { content: ""; position: absolute; left: 0; top: 11px; width: 6px; height: 1px; background: var(--ink-3); }
+      ol.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; counter-reset: s; }
+      ol.steps li { counter-increment: s; border-top: 1px solid var(--ink); padding-top: 14px; }
+      ol.steps li::before { content: "0" counter(s); font-family: var(--mono); font-size: 11px; color: var(--ink-3); display: block; margin-bottom: 10px; }
+      ol.steps h3 { margin: 0 0 6px; font-size: 15px; }
+      ol.steps p { margin: 0; font-size: 14px; color: var(--ink-2); }
+
+      /* download */
+      .download { padding: 96px 0 100px; text-align: center; border-top: 1px solid var(--line); }
+      .download h2 { font-size: clamp(30px, 4vw, 46px); letter-spacing: -0.02em; margin: 18px 0 12px; }
+      .download p { color: var(--ink-2); margin: 0 0 26px; }
+      footer { border-top: 1px solid var(--line); padding: 26px 0 48px; color: var(--ink-3); font-size: 12px; }
+      footer .row { display: flex; gap: 20px; flex-wrap: wrap; }
+
+      .reveal { transition: opacity 0.6s ease, transform 0.6s ease; }
+      .js .reveal { opacity: 0; transform: translateY(14px); }
+      .js .reveal.in { opacity: 1; transform: none; }
+
+      @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+      .hero h1, .hero .lead, .hero .cta, .hero .label { animation: rise 0.7s ease both; }
+      .hero h1 { animation-delay: 0.05s; }
+      .hero .lead { animation-delay: 0.12s; }
+      .hero .cta { animation-delay: 0.18s; }
+      .hero .stage { animation: rise 0.8s 0.24s ease both; }
+
+      @media (prefers-reduced-motion: reduce) {
+        .js .reveal { opacity: 1; transform: none; transition: none; }
+        .hero h1, .hero .lead, .hero .cta, .hero .label, .hero .stage { animation: none; }
+        html { scroll-behavior: auto; }
+        .frames img.on { transform: none; }
+      }
+      @media (max-width: 900px) {
+        .chapter, .chapter.flip { grid-template-columns: 1fr; gap: 26px; }
+        .chapter.flip .text { order: 0; }
+        .stats { grid-template-columns: 1fr 1fr; }
+        .stat:nth-child(3) { border-left: 0; padding-left: 0; }
+        .stat:nth-child(n + 3) { border-top: 1px solid var(--line); }
+        .limits, ol.steps { grid-template-columns: 1fr; gap: 20px; }
+        .flow { grid-template-columns: 1fr; }
+        .arrow { transform: rotate(90deg); text-align: center; }
+        .bar nav { display: none; }
+        section { padding: 60px 0; }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="wrap bar">
+        <span class="brand"><img src="assets/cube.svg" alt="" />BananaConnect</span>
+        <span class="mono ver">v0.1.0 · 预览版</span>
+        <nav>
+          <a href="#room">房间</a>
+          <a href="#wire">传输</a>
+          <a href="#list">列表</a>
+          <a href="#limits">限制</a>
+          <a href="#download">下载</a>
+        </nav>
+      </div>
+      <div class="progress" id="progress"></div>
+    </header>
+
+    <main>
+      <div class="wrap hero">
+        <div class="label mono"><i></i>MINECRAFT · LAN OVER INTERNET</div>
+        <h1>把局域网世界<br /><em>开出去</em>。</h1>
+        <p class="lead">
+          房主在游戏里点「对局域网开放」，这里生成一串 12 位邀请码。朋友输入同一串码，
+          「多人游戏」里就会出现你的世界。传输优先 P2P 直连，打不通时自动落到公益节点。
+        </p>
+        <div class="cta">
+          <a class="btn btn-solid" href="#download">下载 Windows 版</a>
+          <a class="btn btn-line" href="#room">看它怎么跑</a>
+        </div>
+        <div class="hero-meta mono">WINDOWS 10 / 11 · 15.6 MB · 便携免安装 · 首次需管理员权限</div>
+
+        <div class="stage">
+          <div class="frames" id="frames">
+            <img class="on" src="assets/web/room.webp" alt="房间面板" />
+            <img src="assets/web/home.webp" width="1800" height="1153" alt="主界面" />
+            <img src="assets/web/host.webp" width="1800" height="1153" alt="主机状态" />
+            <img src="assets/web/logs.webp" width="1800" height="1153" alt="日志" />
+            <img src="assets/web/settings.webp" width="1800" height="1153" alt="设置" />
+          </div>
+          <div class="stage-foot">
+            <span class="caption" id="caption"><b>房间面板</b> · 邀请码、在线玩家、最近动态</span>
+            <button class="replay" id="replay">重播</button>
+            <div class="dots" id="dots"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="wrap">
+        <div class="stats">
+          <div class="stat"><b><span class="num" data-to="12">12</span></b><span class="mono">位邀请码</span></div>
+          <div class="stat"><b>2<sup>60</sup></b><span class="mono">组合空间</span></div>
+          <div class="stat"><b><span class="num" data-to="4445">4445</span></b><span class="mono">广播中继端口</span></div>
+          <div class="stat"><b>P2P</b><span class="mono">优先，失败中转</span></div>
+        </div>
+      </div>
+
+      <section id="room" class="wrap">
+        <div class="chapter">
+          <div class="figure reveal"><img src="assets/web/room.webp" width="1800" height="1153" alt="房间面板" /></div>
+          <div class="text reveal">
+            <div class="label mono"><i></i>SCENE 01 · 房间</div>
+            <h2>一串码，<br />换一个能进的世界。</h2>
+            <p>网络名、密钥、虚拟网段都从这串码派生，不需要账号、不需要注册、不经过我们的服务器。</p>
+            <ul>
+              <li><span>01</span>32 字母表，12 位，约 2⁶⁰ 种组合，猜不中</li>
+              <li><span>02</span>复制邀请 → 朋友粘贴 → 直接进房间</li>
+              <li><span>03</span>房主退出即房间关闭，不残留进程</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="wire" class="wrap" style="border-top: 1px solid var(--line)">
+        <div class="chapter flip">
+          <div class="figure reveal"><img src="assets/web/host.webp" width="1800" height="1153" alt="主机状态" /></div>
+          <div class="text reveal">
+            <div class="label mono"><i></i>SCENE 02 · 传输</div>
+            <h2>先直连，<br />再谈别的。</h2>
+            <p>基于 EasyTier 做 NAT 穿透：两端能直连就走直连，延迟按实际链路算；打不通才落到公益共享节点中转，不会一直卡在「连接中」。</p>
+            <ul>
+              <li><span>01</span>WireGuard 加密，虚拟网段按房间隔离</li>
+              <li><span>02</span>支持 TCP / UDP / WS 多种承载</li>
+              <li><span>03</span>打洞失败自动中转，状态栏会写明当前路径</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="list" class="wrap" style="border-top: 1px solid var(--line)">
+        <div class="label mono"><i></i>SCENE 03 · 列表</div>
+        <h2 style="font-size: clamp(26px, 3.2vw, 38px); letter-spacing: -0.02em; margin: 16px 0 10px;">世界自己出现，<br />不用记虚拟 IP。</h2>
+        <p style="color: var(--ink-2); max-width: 640px; margin: 0;">
+          朋友端把房主的 4445 广播改写成本地代理端口再发出去，游戏客户端就把它当成局域网世界。
+        </p>
+
+        <div class="flow">
+          <div class="node"><b>房主</b><span>224.0.2.60:4445</span></div>
+          <div class="arrow">→</div>
+          <div class="node"><b>虚拟网络</b><span>P2P / 中转</span></div>
+          <div class="arrow">→</div>
+          <div class="node"><b>朋友</b><span>改写端口后重播</span></div>
+        </div>
+
+        <div class="list-demo">
+          <div class="list-row"><span class="sig"></span><span class="name">Steve 的世界</span><span class="meta">1.20.4 · 2/8</span></div>
+          <div class="list-row"><span class="sig" style="background: var(--line-2)"></span><span class="name">局域网世界（未开放）</span><span class="meta">—</span></div>
+        </div>
+      </section>
+
+      <section class="wrap" style="border-top: 1px solid var(--line)">
+        <div class="label mono"><i></i>TRADE-OFFS</div>
+        <h2 style="font-size: clamp(26px, 3.2vw, 38px); letter-spacing: -0.02em; margin: 16px 0 8px;">为什么不是另一种做法</h2>
+        <table>
+          <thead><tr><th>方案</th><th>传输</th><th>列表出现</th><th>打洞失败</th></tr></thead>
+          <tbody>
+            <tr><td>PCL CE / MCTier 系</td><td>EasyTier 虚拟局域网</td><td>多数要手填虚拟 IP</td><td>公共节点中转</td></tr>
+            <tr><td>XMCL 系</td><td>WebRTC 打洞</td><td>本地代理 + 广播注入</td><td>需要自建 TURN</td></tr>
+            <tr class="me"><td>BananaConnect</td><td>EasyTier + 自建代理</td><td>广播中继，列表直出</td><td>自动走公益节点</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="wrap" style="border-top: 1px solid var(--line)">
+        <div class="label mono"><i></i>RECORDING</div>
+        <h2 style="font-size: clamp(26px, 3.2vw, 38px); letter-spacing: -0.02em; margin: 16px 0 20px;">实际录制</h2>
+        <div class="figure"><img id="gif" src="assets/demo.gif" alt="创建房间、查看主机状态、日志与设置的实际操作录屏" width="1280" height="820" /></div>
+        <div class="gif-bar">
+          <span class="caption">创建房间 → 主机状态 → 日志 → 设置</span>
+          <button class="replay" id="gifReplay">重播</button>
+        </div>
+      </section>
+
+      <section id="limits" class="wrap" style="border-top: 1px solid var(--line)">
+        <div class="label mono"><i></i>HONEST NOTES</div>
+        <h2 style="font-size: clamp(26px, 3.2vw, 38px); letter-spacing: -0.02em; margin: 16px 0 24px;">先把限制说清楚</h2>
+        <div class="limits">
+          <p>首次启动需要管理员权限，用来安装虚拟网卡（WinTun）。</p>
+          <p>公益节点由社区提供，可能限速、排队或临时不可用。</p>
+          <p>朋友也要装同一个客户端，双方都跑 EasyTier 才能互通。</p>
+          <p>离线联机需要房主侧关闭正版验证，这不是本工具能改的。</p>
+          <p>当前是预览版：房间与进程管理已接 EasyTier，玩家列表与流量指标仍在接入。</p>
+          <p>传输层使用 EasyTier（Apache-2.0），不打包任何 Minecraft 官方素材。</p>
+        </div>
+      </section>
+
+      <section class="wrap" style="border-top: 1px solid var(--line)">
+        <div class="label mono"><i></i>QUICK START</div>
+        <h2 style="font-size: clamp(26px, 3.2vw, 38px); letter-spacing: -0.02em; margin: 16px 0 30px;">三步</h2>
+        <ol class="steps">
+          <li class="reveal"><h3>装好，允许网络组件</h3><p>解压即用；第一次创建房间会请求一次管理员权限。</p></li>
+          <li class="reveal"><h3>游戏里开放局域网</h3><p>ESC →「对局域网开放」，回到客户端点创建房间。</p></li>
+          <li class="reveal"><h3>把邀请码发出去</h3><p>朋友输入后等两三秒，进「多人游戏」就能看到世界。</p></li>
+        </ol>
+      </section>
+
+      <div class="download" id="download">
+        <div class="wrap">
+          <div class="label mono" style="justify-content: center;"><i></i>DOWNLOAD</div>
+          <h2>Windows 10 / 11</h2>
+          <p>便携版，解压后右键以管理员身份运行。</p>
+          <a class="btn btn-solid" href="https://wwbby.lanzoub.com/i6twd4gbj8ih" target="_blank" rel="noopener">下载 BananaConnect-0.1.0-win-x64.zip</a>
+          <div class="hero-meta mono">15.6 MB · 蓝奏云 · 提取码 BANA · 含 EasyTier core 与 WinTun 驱动</div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <div class="wrap row">
+        <span>BananaConnect 0.1.0</span>
+        <span>传输层 EasyTier · Apache-2.0</span>
+        <span>与 Mojang / Microsoft 无关</span>
+      </div>
+    </footer>
+
+    <script>
+      document.documentElement.classList.add("js");
+
+      const frames = [...document.querySelectorAll("#frames img")];
+      const captions = [
+        "<b>房间面板</b> · 邀请码、在线玩家、最近动态",
+        "<b>主界面</b> · 填端口创建，或者输入邀请码加入",
+        "<b>主机状态</b> · 延迟、上下行、隧道状态",
+        "<b>日志</b> · 隧道与转发的完整记录",
+        "<b>设置</b> · 主题色、网络、内核状态",
+      ];
+      const caption = document.getElementById("caption");
+      const dots = document.getElementById("dots");
+      let index = 0;
+      let timer = null;
+
+      frames.forEach((_, i) => {
+        const dot = document.createElement("button");
+        dot.setAttribute("aria-label", `场景 ${i + 1}`);
+        if (i === 0) dot.className = "on";
+        dot.addEventListener("click", () => show(i, true));
+        dots.appendChild(dot);
+      });
+
+      function show(next, restart) {
+        frames[index].classList.remove("on");
+        dots.children[index].classList.remove("on");
+        index = next % frames.length;
+        // 重新触发 transform，做出轻微的推近
+        const img = frames[index];
+        img.classList.remove("on");
+        void img.offsetWidth;
+        img.classList.add("on");
+        dots.children[index].classList.add("on");
+        caption.innerHTML = captions[index];
+        if (restart) start();
+      }
+
+      function start() {
+        stop();
+        timer = setInterval(() => show(index + 1), 3200);
+      }
+      function stop() {
+        if (timer) clearInterval(timer);
+        timer = null;
+      }
+
+      start();
+      document.getElementById("replay").addEventListener("click", () => show(0, true));
+      const stage = document.querySelector(".stage");
+      stage.addEventListener("mouseenter", stop);
+      stage.addEventListener("mouseleave", start);
+
+      const progress = document.getElementById("progress");
+      const navLinks = [...document.querySelectorAll(".bar nav a")];
+      addEventListener("scroll", () => {
+        const max = document.documentElement.scrollHeight - innerHeight;
+        progress.style.width = `${max > 0 ? (scrollY / max) * 100 : 0}%`;
+        let current = "";
+        for (const el of document.querySelectorAll("[id]")) {
+          if (el.getBoundingClientRect().top <= 140) current = el.id;
+        }
+        for (const link of navLinks) {
+          link.classList.toggle("active", link.getAttribute("href") === `#${current}`);
+        }
+      }, { passive: true });
+
+      const gif = document.getElementById("gif");
+      document.getElementById("gifReplay").addEventListener("click", () => {
+        gif.src = `assets/demo.gif?t=${Date.now()}`;
+      });
+
+      const nums = document.querySelectorAll(".num");
+      if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        const countObserver = new IntersectionObserver((entries) => {
+          for (const entry of entries) {
+            if (!entry.isIntersecting) continue;
+            const el = entry.target;
+            const target = Number(el.dataset.to ?? "0");
+            const start = performance.now();
+            const tick = (now) => {
+              const p = Math.min(1, (now - start) / 900);
+              el.textContent = String(Math.round(target * (1 - Math.pow(1 - p, 3))));
+              if (p < 1) requestAnimationFrame(tick);
+            };
+            requestAnimationFrame(tick);
+            countObserver.unobserve(el);
+          }
+        }, { threshold: 0.6 });
+        nums.forEach((el) => countObserver.observe(el));
+      }
+
+      const items = document.querySelectorAll(".reveal");
+      if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        const observer = new IntersectionObserver((entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("in");
+              observer.unobserve(entry.target);
+            }
+          }
+        }, { threshold: 0.12 });
+        items.forEach((item) => observer.observe(item));
+        setTimeout(() => items.forEach((item) => item.classList.add("in")), 1500);
+      } else {
+        items.forEach((item) => item.classList.add("in"));
+      }
+    </script>
+  </body>
+</html>
